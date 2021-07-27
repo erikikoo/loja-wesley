@@ -1,0 +1,30 @@
+fa-icon {
+    color: #007BFF;    
+}
+
+.btn-outline-primary {
+    background-color: white;
+}
+
+input {
+    width: 30px;
+    height: auto;
+    border-radius: 50%;
+    margin: 0 5px;    
+}
+
+.baixa {
+    background-color: #bbb;
+}
+.media {
+    background-color: gold;
+}
+.alta {
+    background-color: tomato;
+}
+.prioridade-urgente {
+    background-color: cadetblue;
+}
+// &:nth-child(4) {
+//     background-color: cadetblue;
+// }

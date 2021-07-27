@@ -1,0 +1,245 @@
+
+<!-- =================================== TELA DE PEDIDOS ============================== -->
+<div class="card-columns ">
+    <div  *ngIf="pedidos_filtrados.length > 0">
+      <div class="card card-pedido box-shadow" *ngFor="let pedido of pedidos_filtrados" 
+          [ngClass]="
+          {'prioridade-baixa': pedido.prioridade === '1',
+          'prioridade-media': pedido.prioridade === '2',
+          'prioridade-alta': pedido.prioridade === '3',
+          'prioridade-urgente': pedido?.urgencia === '1'}"
+          (click)="MostraDetalhes(pedido.id, pedidoDetalhesModal)">
+          <div class="card-body">
+              <div class='layout'>              
+                  <div  class='itens'>
+                    <div *ngFor='let item of pedido.pedido_itens'>
+                      <span class="card-title negrito">{{item?.produto}}</span>
+                    </div>  
+                    
+                  </div>
+                  <span class='negrito'>OS.: {{pedido?.numero_pedido}}</span>
+              </div>
+              
+              <div class="painel-comentarios" *ngIf="pedido?.conversas.length > 0">
+                <div *ngFor="let comentario of pedido.conversas">
+                  
+                  <div [ngClass]="comentario.visualizado ? 'card-text bg-white distanciamento box-shadow' : 'card-text naoLido distanciamento box-shadow'">
+                    
+                    <p class='text-justify'>{{comentario?.descricao}}</p>
+                    
+                    <span class="text-right">
+                      <small class="text-muted">Login: {{comentario?.login}}</small>
+                    </span>
+
+                  </div>
+                  
+                </div>   
+              </div> 
+              <p class="card-text" class="bg-white distanciamento box-shadow" *ngIf="pedido?.conversas.length == 0">Sem comentários</p>
+                      
+              <footer class='layout'>
+                <span><strong>Venda: {{pedido.created_at | date:'shortDate'}}</strong></span>
+                <span><strong>Entrega: {{pedido.data_entrega  | date:'shortDate'}}</strong></span>
+              </footer>
+
+          </div>
+      </div>
+    </div>
+    
+</div>
+<div class="alert alert-primary text-center" *ngIf="pedidos_filtrados.length < 1">
+  Nada encontrado
+</div>
+<!-- ======================================================================================= -->
+
+ 
+  <ng-template #pedidoDetalhesModal>    
+    
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">  
+            <div>            
+              <!-- <span>Job: {{pedido?.pedido_itens[0].produto}}</span> -->
+              <span>OS.: {{pedido?.numero_pedido}}</span>
+            </div>
+            <div>
+              <button type="button" class="pull-right btn btn-danger" aria-label="Close" (click)="modalFechar()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+          </div>
+          
+          <div class="modal-body">
+            
+            <div class="painel">           
+              
+              <div class="hist-conversas">
+                <h3>Histórico de conversas</h3>
+                
+                <p class="card-text" class="bg-white distanciamento" *ngIf="!pedido?.conversas">Sem comentários</p>
+                
+                <div *ngFor="let comentario of pedido?.conversas">
+                  <div class='distanciamento'>
+                    <p class='text-justify'>{{comentario.descricao}}</p>
+                    <span class='text-right'>
+                      <small class="text-muted text-right">Login: {{comentario.login}}</small>
+                      <small class="text-muted">{{comentario.created_at | date:'shortDate'}}</small>
+                    </span>
+                  </div>
+                </div>
+                <p class='text-right'>
+                  <button class='btn btn-primary' (click)="abreModal(addComentarioModal)">+ NOVO COMENTÁRIO</button>
+                  
+                </p>
+                
+              </div>
+    
+              <div class="caracteristicas">
+                <h3>Itens do Pedido</h3>
+
+                <tabset>            
+                  <tab *ngFor="let item of pedido?.pedido_itens, let i = index"
+                      [heading]="item?.produto">
+                      <div>
+                  
+
+                        <table class='table'>
+                          <tr>
+                            <td>Produto:</td>
+                            <td>{{item.produto}}</td>
+                          </tr>
+                          <tr>
+                            <td>Tiragem:</td>
+                            <td>{{item.tiragem}}</td>
+                          </tr>                   
+                          <tr>
+                            <td>Forma de pagamento:</td>
+                            <td>{{pedido?.forma_pagamento | titlecase}}</td>
+                            
+                          </tr>
+                          <tr>
+                            <td>Observações:</td>
+                            <td class='text-justify'>{{item?.descricao}}</td>
+                          </tr>
+                        </table>
+          
+                      </div>
+                  </tab>
+                </tabset> 
+
+              </div>
+            </div>
+            
+            <div class="painel">
+              
+              <div class="cliente-dados">
+                <h3>Dados do Cliente</h3>
+                <table>
+                  <tr>
+                    <td>Nome</td>
+                    <td>{{pedido?.cliente.nome}}</td>                  
+                  </tr>
+                  <tr>
+                    <td>Celular:</td>
+                    <td>{{pedido?.cliente.cliente_contato.celular}}</td>
+                  </tr>
+                  <tr>
+                    <td>Email:</td>
+                    <td>{{pedido?.cliente.cliente_contato.email}}</td>
+                  </tr>
+                  <tr>
+                    <td>Endereço:</td>
+                    <td>{{pedido?.cliente.cliente_endereco.endereco}}, 
+                        {{pedido?.cliente.cliente_endereco.numero}} -
+                        {{pedido?.cliente.cliente_endereco.bairro}} - 
+                        {{pedido?.cliente.cliente_endereco.cidade}}/
+                        {{pedido?.cliente.cliente_endereco.estado}}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <div class="dados-entrega" *ngIf="pedido?.endereco_entrega">
+                <h3>Dados da entrega</h3>
+                <table>
+                  <tr>                
+                    <td>Endereço:</td>
+                    <td>{{pedido?.endereco_entrega}}, 
+                        {{pedido?.numero_entrega}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              
+            </div>
+            
+            
+            
+          </div>
+
+          
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="abreModal(enviarParaProducao)">ENVIAR PARA PRODUÇÃO</button>
+            <button type="button" class="btn btn-primary" (click)="modalFechar()">FECHAR</button>
+          </footer>
+        </div>
+      </div>  
+    
+  </ng-template>
+
+  <ng-template #addComentarioModal>
+
+    
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Adicionar comentário</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalFechar()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form class='form-cliente-entrega' [formGroup]="formConversa">
+        <div class="form-row">
+          <label for="campoDescricaoItem">Comentario:</label>        
+          <textarea class="form-control" id='campoDescricaoItem' formControlName='descricao'></textarea>
+        </div>
+      </form>
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="addComentario(pedido.id)">ADICIONAR COMENTÁRIO</button>
+        <button type="button" class="btn btn-primary" (click)="modalFechar()">FECHAR</button>
+      </footer>
+    </div>
+    
+  </ng-template>
+
+  <ng-template #enviarParaProducao>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Encaminhar para produção</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalFechar()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">  
+      
+      <table class='table table-hover table-enviar-prod'>
+        <thead>
+          <th>#</th>
+          <th>Produto</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of pedido?.pedido_itens, let i = index">
+            <td>{{i+1}}</td>
+            <td colspan="3">{{item.produto}}</td>
+            <td><input type="checkbox" [checked]='item.produzir' (click)='checkItem(item.id)'>
+            {{item.produzir ? "em produção" : 'produzir'}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="sendProducao()">ENVIAR</button>
+        <button type="button" class="btn btn-primary" (click)="modalFechar()">FECHAR</button>
+      </footer>
+    </div>
+  </ng-template>

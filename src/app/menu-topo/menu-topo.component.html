@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-sm navbar-primary bg-primary">
+    <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <div class="navbar-nav mr-auto mt-2 mt-lg-0 btn-group">
+            <div class="nav-item active">
+                <button class="nav-link btn btn-outline-primary" routerLink="pedidos">PEDIDOS</button>
+            </div>
+            
+            <div class="nav-item active">
+              <button class="nav-link btn btn-outline-primary" routerLink="venda">VENDA</button>
+            </div>
+
+            <!-- <div class="nav-item active">
+                <button class="nav-link btn btn-outline-primary" routerLink="producao">PRODUÇÃO</button>
+            </div> -->
+            
+        </div>
+        <!-- <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+  
+        <input type="button" class='baixa' (click)='filtraPedido(1)'>
+        <input type="button" class='media' (click)='filtraPedido(2)'>
+        <input type="button" class='alta' (click)='filtraPedido(3)'>
+        <!-- <input type="button" class='prioridade-urgente' (click)='filtraPedido(4)'> -->
+        <input type="button" class='limpar' (click)='filtraPedido(0)'>
+    </div>
+  </nav>
