@@ -1,4 +1,4 @@
 export const environment = {
-  // API: "http://localhost:3000",
+  API: "https://loja-wesley-api.herokuapp.com/",
   production: true
 };
