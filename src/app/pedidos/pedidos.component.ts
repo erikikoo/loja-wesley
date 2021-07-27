@@ -242,7 +242,7 @@ config = {
   ngOnInit() {
       
     this.defaultService.emiteEventoFiltro.subscribe(resp => {      
-      let filtro:any = resp      
+      let filtro:any = resp 
       this.pedidos_filtrados = this.pedidos.filter((obj:any) => {
         
         if (filtro == 0) {          
@@ -252,8 +252,9 @@ config = {
         }
       })       
     }) 
-
+    
     this.pedidoService.getAllPedidos().subscribe( (resp) => {
+      console.log(resp)     
         this.pedidos = resp        
         this.pedidos_filtrados = resp        
       }, (err) => {
