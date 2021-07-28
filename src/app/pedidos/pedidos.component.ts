@@ -161,13 +161,12 @@ export class PedidosComponent implements OnInit {
 
 @Input() filtroPrioridade:any  
 pedidos:any = []
-pedidos_filtrados:any = []
+pedidos_filtrados:any = undefined
 itemParaProducao:any = []
+
 pedidoDetalhesRef: BsModalRef | undefined;
-addComentarioRef: BsModalRef | undefined;
 enviaParaProducaoRef: BsModalRef | undefined;
-  
-// @ViewChild('pedidosDetalhesModal') pedidoDetalhesModal;
+addComentarioRef!: BsModalRef;
 
 pedido:any
 constructor(private modalService: BsModalService, 
@@ -175,7 +174,9 @@ constructor(private modalService: BsModalService,
             private conversaService: ConversaService,
             private defaultService: DefaultService,            
             private formBuild: FormBuilder,
-            private notificationService: NotificationService) {}
+            private notificationService: NotificationService) {
+               
+            }
 
 config = {
   animated: false,
@@ -187,17 +188,17 @@ config = {
     descricao: [null, Validators.required]
   })
 
-  MostraDetalhes(pedido_id: any, templade: TemplateRef<any>) {
+  abreModalDetalhes(pedido_id: any, templade: TemplateRef<any>) {
     this.pedidoService.showPedido(pedido_id).subscribe((resp) => {      
-      this.pedido = resp;
-      console.log(resp)
+      this.pedido = resp;      
     }, (err) => {
       console.error(err);
       this.notificationService.notify("Ops! ocorreu um erro ao tentar carregar o pedido")
     })
     
-    this.pedidoDetalhesRef = this.modalService.show(templade, this.config)
+    this.pedidoDetalhesRef = this.modalService.show(templade, {id: 1, class: "modal-lg"})
   };
+
 
   addComentario(pedido_id:any) {   
     if(this.formConversa.valid) {      
@@ -210,13 +211,22 @@ config = {
         }
       )
     }
-    
-    this.modalFechar()
+    this.modalFechar();
+    // this.closeModal(2);
   }
   
-  abreModal(templade: TemplateRef<any>) {
-    this.addComentarioRef = this.modalService.show(templade)
+  abreModalAddComentario(templade: TemplateRef<any>) {
+    this.addComentarioRef = this.modalService.show(templade, {id: 2})
   }
+
+  abreModalProducao(templade: TemplateRef<any>) {
+    this.enviaParaProducaoRef = this.modalService.show(templade, {id: 3})
+  }
+  
+  closeModal(modalId?: number){
+    this.modalService.hide(modalId);
+  }
+
 
   modalFechar() {    
       this.modalService.hide();
@@ -235,7 +245,7 @@ config = {
       console.error("Error ao mandar para produção")
     })
     this.itemParaProducao = []
-    this.modalService.hide()
+    this.closeModal(3)
   }
     
   
@@ -253,10 +263,13 @@ config = {
       })       
     }) 
     
-    this.pedidoService.getAllPedidos().subscribe( (resp) => {
-      console.log(resp)     
+    this.pedidoService.getAllPedidos().subscribe( (resp) => {      
+      setTimeout( () => {
+        console.log(resp)
         this.pedidos = resp        
         this.pedidos_filtrados = resp        
+      }, 2000)
+      
       }, (err) => {
         this.notificationService.notify("Ops, Ocorreu um erro ao carregar os Pedidos!")
       })

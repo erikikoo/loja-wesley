@@ -1,14 +1,14 @@
 
 <!-- =================================== TELA DE PEDIDOS ============================== -->
 <div class="card-columns ">
-    <div  *ngIf="pedidos_filtrados.length > 0">
+    <div  *ngIf="pedidos_filtrados?.length > 0">
       <div class="card card-pedido box-shadow" *ngFor="let pedido of pedidos_filtrados" 
           [ngClass]="
           {'prioridade-baixa': pedido.prioridade === '1',
           'prioridade-media': pedido.prioridade === '2',
           'prioridade-alta': pedido.prioridade === '3',
           'prioridade-urgente': pedido?.urgencia === 't'}"
-          (click)="MostraDetalhes(pedido.id, pedidoDetalhesModal)">
+          (click)="abreModalDetalhes(pedido.id, pedidoDetalhesModal)">
           <div class="card-body">
               <div class='layout'>              
                   <div  class='itens'>
@@ -47,7 +47,10 @@
     </div>
     
 </div>
-<div class="alert alert-primary text-center" *ngIf="pedidos_filtrados.length < 1">
+<div class="alert alert-primary text-center" *ngIf="!pedidos_filtrados">
+  Carregado...
+</div>
+<div class="alert alert-primary text-center" *ngIf="pedidos_filtrados?.length == 0">
   Nada encontrado
 </div>
 <!-- ======================================================================================= -->
@@ -63,7 +66,7 @@
               <span>OS.: {{pedido?.numero_pedido}}</span>
             </div>
             <div>
-              <button type="button" class="pull-right btn btn-danger" aria-label="Close" (click)="modalFechar()">
+              <button type="button" class="pull-right btn btn-danger" aria-label="Close" (click)="closeModal()">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>
@@ -88,7 +91,7 @@
                   </div>
                 </div>
                 <p class='text-right'>
-                  <button class='btn btn-primary' (click)="abreModal(addComentarioModal)">+ NOVO COMENTÁRIO</button>
+                  <button class='btn btn-primary' (click)="abreModalAddComentario(addComentarioModal)">+ NOVO COMENTÁRIO</button>
                   
                 </p>
                 
@@ -179,8 +182,8 @@
 
           
           <footer class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="abreModal(enviarParaProducao)">ENVIAR PARA PRODUÇÃO</button>
-            <button type="button" class="btn btn-primary" (click)="modalFechar()">FECHAR</button>
+            <button type="button" class="btn btn-success" (click)="abreModalProducao(enviarParaProducao)">ENVIAR PARA PRODUÇÃO</button>
+            <button type="button" class="btn btn-primary" (click)="closeModal(1)">FECHAR</button>
           </footer>
         </div>
       </div>  
@@ -192,7 +195,7 @@
     
     <div class="modal-header">
       <h4 class="modal-title pull-left">Adicionar comentário</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalFechar()">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal(2)">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -205,7 +208,7 @@
       </form>
       <footer class="modal-footer">
         <button type="button" class="btn btn-success" (click)="addComentario(pedido.id)">ADICIONAR COMENTÁRIO</button>
-        <button type="button" class="btn btn-primary" (click)="modalFechar()">FECHAR</button>
+        <button type="button" class="btn btn-primary" (click)="closeModal(2)">FECHAR</button>
       </footer>
     </div>
     

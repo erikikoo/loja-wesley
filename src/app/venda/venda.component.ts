@@ -59,11 +59,7 @@ export class VendaComponent implements OnInit {
       this.minDate = new Date(this.today.setDate(this.today.getDate()));
 
       this.maxDate = new Date(this.today.getFullYear(), this.today.getMonth(), 25);
-      localeService.use('pt-br');
-
-      
-   
-   
+      localeService.use('pt-br');   
     }
   
   formVenda = this.formBuilder.group({    

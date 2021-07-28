@@ -1,3 +1,26 @@
 
 
+body {    
+    background-color: #f7f7f7;
+}
 
+#main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+
+#painel {
+    min-height: 100vh;
+    padding-bottom: 2.5rem;
+}
+
+.footer {
+    // position: absolute;
+    // bottom: 0;
+    width: 100%;
+    height: 2.5rem;     
+    background-color: #267bbe;
+    
+}

@@ -23,6 +23,7 @@ import { MenuTopoComponent } from './menu-topo/menu-topo.component';
 import { DefaultService } from './default.service';
 import { PrincipalComponent } from './principal/principal.component';
 import { ProducaoComponent } from './producao/producao.component';
+// import { NgxMaskModule } from 'ngx-mask';
 
 
 registerLocaleData(ptBr);
@@ -46,6 +47,7 @@ registerLocaleData(ptBr);
     HttpClientModule,
     BrowserAnimationsModule,
     BrowserAnimationsModule,
+    // NgxMaskModule.forRoot(),
     TabsModule.forRoot(),
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot(),
