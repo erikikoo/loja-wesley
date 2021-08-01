@@ -47,18 +47,23 @@
     </div>
     
 </div>
-<div class="alert alert-primary text-center" *ngIf="!pedidos_filtrados">
+<div class="alert alert-primary text-center" *ngIf="!pedidos_filtrados && !errorLoadServidor">
   Carregado...
 </div>
-<div class="alert alert-primary text-center" *ngIf="pedidos_filtrados?.length == 0">
+<div class="alert alert-warning text-center" *ngIf="pedidos_filtrados?.length == 0 && !errorLoadServidor">
   Nada encontrado
 </div>
+<div class="alert alert-danger text-center" *ngIf="errorLoadServidor">
+  Um erro encontrado ao carregar dados do servidor!
+</div>
+
+
 <!-- ======================================================================================= -->
 
  
   <ng-template #pedidoDetalhesModal>    
     
-      <div class="modal-dialog modal-sm">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">  
             <div>            

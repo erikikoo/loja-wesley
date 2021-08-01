@@ -3,6 +3,7 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 import { ConversaService } from '../conversa/conversa.service';
 import { DefaultService } from '../default.service';
@@ -168,6 +169,8 @@ pedidoDetalhesRef: BsModalRef | undefined;
 enviaParaProducaoRef: BsModalRef | undefined;
 addComentarioRef!: BsModalRef;
 
+errorLoadServidor:boolean = false
+
 pedido:any
 constructor(private modalService: BsModalService, 
             private pedidoService: PedidoService,
@@ -179,6 +182,7 @@ constructor(private modalService: BsModalService,
             }
 
 config = {
+  id: 1,  
   animated: false,
   class: 'modal-xl',
   ignoreBackdropClick: true
@@ -196,7 +200,7 @@ config = {
       this.notificationService.notify("Ops! ocorreu um erro ao tentar carregar o pedido")
     })
     
-    this.pedidoDetalhesRef = this.modalService.show(templade, {id: 1, class: "modal-lg"})
+    this.pedidoDetalhesRef = this.modalService.show(templade, this.config)
   };
 
 
@@ -263,14 +267,14 @@ config = {
       })       
     }) 
     
-    this.pedidoService.getAllPedidos().subscribe( (resp) => {      
-      setTimeout( () => {
-        console.log(resp)
+    this.pedidoService.getAllPedidos().subscribe( (resp) => {            
+        
         this.pedidos = resp        
         this.pedidos_filtrados = resp        
-      }, 2000)
+        this.errorLoadServidor = false
       
       }, (err) => {
+        this.errorLoadServidor = true
         this.notificationService.notify("Ops, Ocorreu um erro ao carregar os Pedidos!")
       })
 
